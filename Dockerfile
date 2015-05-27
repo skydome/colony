@@ -1,4 +1,4 @@
-FROM golang:1.4.2
+FROM golang:latest
 MAINTAINER Abdulkadir Yaman <abdulkadiryaman@gmail.com>
 
 RUN mkdir /tmp/gopath
