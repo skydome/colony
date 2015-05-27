@@ -26,4 +26,21 @@ build:
         name: go test
         code: |
           go test ./...
-
+deploy:
+  steps:
+  - add-to-known_hosts:
+        hostname: api.skydome.io
+   - mktemp:
+      envvar: PRIVATEKEY_PATH
+   - create-file:
+      name: write key
+      filename: $PRIVATEKEY_PATH
+      content: $DIGITALOCEAN_PRIVATE
+      overwrite: true
+      hide-from-log: true
+   - script:
+      name: remove container  
+      code: ssh -i $PRIVATEKEY_PATH -l core -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no api.skydome.io docker rm -d colony | true
+   - script:
+      name: run container
+      code: ssh -i $PRIVATEKEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=no core@api.skydome.io docker run -it -d -p 8080:8080 --name colony skydome/colony
