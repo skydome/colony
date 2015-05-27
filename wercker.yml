@@ -29,7 +29,7 @@ build:
 deploy:
   steps:
   - add-to-known_hosts:
-        hostname: api.skydome.io
+    hostname: api.skydome.io
    - mktemp:
       envvar: PRIVATEKEY_PATH
    - create-file:
