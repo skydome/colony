@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"net/http"
 	"runtime"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Pheremone struct {
-	Id    string `json:"id" binding:"required"`
-	Ant   string `json:"ant" binding:"required"`
-	Type  string `json:"type" binding:"required"`
-	Value string `json:"value" binding:"required"`
+	At    time.Time `json:"at"`
+	Ant   string    `json:"ant" binding:"required"`
+	Type  string    `json:"type" binding:"required"`
+	Value string    `json:"value" binding:"required"`
 }
 
 func main() {
@@ -37,16 +38,20 @@ func StartGin() {
 
 	r := gin.Default()
 
-	r.POST("/data", func(c *gin.Context) {
+	r.POST("/telemetry/plant/id/:id", func(c *gin.Context) {
 		var pheremone Pheremone
+		plantId := c.Params.ByName("id")
+		c.Bind(&pheremone)
 
-		c.Bind(&pheremone) // This will infer what binder to use depending on the content-type header.
-
+		pheremone.At = time.Now()
 		fmt.Println("Got request :", pheremone)
-		WriteToCassandra(pheremone)
+		WriteToCassandra(plantId, pheremone)
 		c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
 	})
 
-	// Listen and server on 0.0.0.0:8080
+	r.GET("/telemetry/plant/id/:id", func(c *gin.Context) {
+
+	})
+
 	r.Run(":8080")
 }
