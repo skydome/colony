@@ -10,13 +10,14 @@ import (
 
 type Pheremone struct {
 	Id    string `json:"id" binding:"required"`
-	From  string `json:"from" binding:"required"`
+	Ant   string `json:"ant" binding:"required"`
 	Type  string `json:"type" binding:"required"`
 	Value string `json:"value" binding:"required"`
 }
 
 func main() {
 	ConfigRuntime()
+	Initialize()
 	StartWorkers()
 	StartGin()
 }
@@ -32,16 +33,17 @@ func StartWorkers() {
 }
 
 func StartGin() {
-	gin.SetMode(gin.ReleaseMode)
+	//	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
 
 	r.POST("/data", func(c *gin.Context) {
-		var json Pheremone
+		var pheremone Pheremone
 
-		c.Bind(&json) // This will infer what binder to use depending on the content-type header.
+		c.Bind(&pheremone) // This will infer what binder to use depending on the content-type header.
 
-		fmt.Println("Got request :", json)
+		fmt.Println("Got request :", pheremone)
+		WriteToCassandra(pheremone)
 		c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
 	})
 
