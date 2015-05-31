@@ -1,12 +1,15 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"runtime"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	gin "github.com/gin-gonic/gin"
 )
 
 type Pheremone struct {
@@ -17,6 +20,18 @@ type Pheremone struct {
 }
 
 func main() {
+	f, err := os.OpenFile("/tmp/cassa.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		fmt.Errorf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+
+	var buf bytes.Buffer
+	log.New(&buf, "logger: ", log.Lshortfile)
+	log.Println("This is a test log entry")
+
 	ConfigRuntime()
 	Initialize()
 	StartWorkers()
@@ -37,14 +52,13 @@ func StartGin() {
 	//	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
-
 	r.POST("/telemetry/plant/id/:id", func(c *gin.Context) {
 		var pheremone Pheremone
 		plantId := c.Params.ByName("id")
 		c.Bind(&pheremone)
 
 		pheremone.At = time.Now()
-		fmt.Println("Got request :", pheremone)
+		log.Println("Got request :", pheremone)
 		WriteToCassandra(plantId, pheremone)
 		c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
 	})

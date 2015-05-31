@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/hailocab/gocassa"
 )
@@ -11,7 +11,8 @@ var keySpace gocassa.KeySpace
 var plantMap map[string]gocassa.MapTable
 
 func Initialize() {
-	fmt.Println("Initializing GoCassa")
+	log.Println("Initializing GoCassa")
+
 	var err error
 	keySpace, err = gocassa.ConnectToKeySpace("test", []string{"127.0.0.1"}, "", "")
 	if err != nil {
@@ -21,15 +22,15 @@ func Initialize() {
 }
 
 func WriteToCassandra(plantId string, pheremone Pheremone) {
-	fmt.Println("Writing pheremone: ", pheremone)
-	fmt.Println("With plantId: ", plantId)
+	log.Println("Writing pheremone: ", pheremone)
+	log.Println("With plantId: ", plantId)
 	plant := plantMap[plantId]
 	if plant == nil {
 		plant = keySpace.MapTable(plantId, "Ant", Pheremone{})
-		fmt.Print("creating table : ", plantId)
+		log.Print("creating table : ", plantId)
 		err := plant.Create()
 		if err != nil {
-			fmt.Println("Error:", err)
+			log.Println("Error:", err)
 			return
 		} else {
 			plantMap[plantId] = plant
