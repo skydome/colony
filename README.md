@@ -1,4 +1,4 @@
 # colony
 Colony reported by nests
 
-[![wercker status](https://app.wercker.com/status/22582ec40b755be4b608d4f2d5d7fb94/m "wercker status")](https://app.wercker.com/project/bykey/22582ec40b755be4b608d4f2d5d7fb94)
+[![wercker status](https://app.wercker.com/status/c73543b937bcb230691dc1334192c1a7/m "wercker status")](https://app.wercker.com/project/bykey/c73543b937bcb230691dc1334192c1a7)
