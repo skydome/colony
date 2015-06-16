@@ -1,4 +1,4 @@
-box: google/golang
+box: golang
 # Build definition
 build:
   # The steps that will be executed on build
@@ -38,6 +38,11 @@ deploy:
       content: $DIGITALOCEAN_PRIVATE
       overwrite: true
       hide-from-log: true
+   
+   - script:
+      name: test ssh
+      code: ssh
+       
    - script:
       name: remove container  
       code: ssh -i $PRIVATEKEY_PATH -l core -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no api.skydome.io docker rm -f colony | true
