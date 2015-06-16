@@ -14,7 +14,7 @@ func Initialize() {
 	log.Println("Initializing GoCassa")
 
 	var err error
-	keySpace, err = gocassa.ConnectToKeySpace("test", []string{"127.0.0.1"}, "", "")
+	keySpace, err = gocassa.ConnectToKeySpace("test", []string{"api.skydome.io"}, "", "")
 	if err != nil {
 		panic(err)
 	}
