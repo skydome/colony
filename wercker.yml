@@ -43,4 +43,4 @@ deploy:
       code: ssh -i $PRIVATEKEY_PATH -l core -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no api.skydome.io docker rm -f colony | true
    - script:
       name: run container
-      code: ssh -i $PRIVATEKEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=no core@api.skydome.io docker run -it -d -p 8080:8080 --name colony skydome/colony
+      code: ssh -v -i $PRIVATEKEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=no core@api.skydome.io docker run -it -d -p 8080:8080 --name colony skydome/colony
