@@ -1,4 +1,4 @@
-box: wercker/golang
+box: google/golang
 # Build definition
 build:
   # The steps that will be executed on build
@@ -6,6 +6,8 @@ build:
     # Sets the go workspace and places you package
     # at the right place in the workspace tree
     - setup-go-workspace
+
+    - wercker/golint
 
     # Gets the dependencies
     - script:
